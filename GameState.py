@@ -11,7 +11,7 @@ cameraPos = [0,0]
 
 def initBackground():
     global bgRect, background
-    bgRect = statics.sprites()[0].rect.unionall(map(lambda s: s.rect, statics))
+    bgRect = statics.sprites()[0].rect.unionall(list(map(lambda s: s.rect, statics)))
     background = pygame.surface.Surface(bgRect.size)
     
     cameraPos = bgRect.topleft # modify for drawing

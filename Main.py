@@ -3,6 +3,7 @@ from pygame.locals import *
 import sys
 from generation import genMaze
 from Sprite import Sprite
+from Enemy import Enemy
 import GameState
 
 pygame.init()
@@ -19,10 +20,15 @@ floors = pygame.sprite.Group()
 for x in range(maze.M):
     for y in range(maze.N):
         if not maze[x,y]:
-            walls.add(Sprite("wall_placeholder.png", (x*SCALE, y*SCALE), SCALE))
+            walls.add(Sprite("wall.png", (x*SCALE, y*SCALE), SCALE))
 
 GameState.statics.add(*walls)
 GameState.initBackground()
+
+enemies = pygame.sprite.Group()
+for i in range(3):
+    enemies.add(Enemy("enemy_placeholder.png", SCALE))
+GameState.moving.add(*enemies)
 
 def handlePlayerInput():
     for event in pygame.event.get():
@@ -47,5 +53,8 @@ while 1:
     handlePlayerInput()
     
     GameState.draw(screen)
+    for e in enemies:
+        e.roam(SCALE, walls)
+    
     pygame.display.update()
     pygame.time.delay(100)
