@@ -1,17 +1,18 @@
-from Sprite import Sprite
+from Sprite import HealthSprite
 import random
+import GameState
 
-class Enemy(Sprite):
+class Enemy(HealthSprite):
     
     def __init__(self, image, size, positionRange):
         position = (random.randrange(1, positionRange) * size, random.randrange(1, positionRange) * size)
         
-        Sprite.__init__(self, image, position, size)
-        
-        self.hp = 3
+        HealthSprite.__init__(self, image, position, size, 3)
         self.timeSinceRoam = 0
         
-
+    def update(self):
+        if self.rect.colliderect(GameState.player.rect):
+            GameState.player.hit(1);
     
     def roam(self, SCALE, colliders):
         self.timeSinceRoam += 1

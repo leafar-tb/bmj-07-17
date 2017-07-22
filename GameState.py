@@ -1,5 +1,3 @@
-#/usr/bin/python
-
 import os, sys
 import pygame
 from pygame.locals import *
@@ -7,6 +5,8 @@ from pygame.locals import *
 statics = pygame.sprite.Group()
 moving = pygame.sprite.Group()
 stairs = pygame.sprite.Group()
+player = None
+gameOver = False
 
 cameraPos = [0,0]
 
