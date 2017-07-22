@@ -1,3 +1,4 @@
+import pygame
 from Sprite import HealthSprite
 import random
 import GameState
@@ -8,14 +9,16 @@ class Enemy(HealthSprite):
         position = (random.randrange(0, 10) * size, random.randrange(0, 10) * size)
         
         HealthSprite.__init__(self, image, position, size, 3)
-        self.timeSinceRoam = 0
+        self.lastRoam = 0
     
     def update(self):
         if self.rect.colliderect(GameState.player.rect):
-            GameState.player.hit(1);
+            GameState.player.hit(1)
+        self.roam()
     
-    def roam(self, SCALE, colliders):
-        self.timeSinceRoam += 1
-        if self.timeSinceRoam > 3:
-            self.moveBy(*random.choice(((-SCALE, 0), (0, -SCALE), (SCALE, 0), (0, SCALE))), colliders=colliders)
-            self.timeSinceRoam = 0
+    def roam(self):
+        SCALE = self.rect.width
+        self.lastRoam += 1
+        if pygame.time.get_ticks()-self.lastRoam >= 1000:
+            self.moveBy(*random.choice(((-SCALE, 0), (0, -SCALE), (SCALE, 0), (0, SCALE))))
+            self.timeSinceRoam = pygame.time.get_ticks()

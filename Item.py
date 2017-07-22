@@ -7,6 +7,7 @@ class Item(Sprite):
     def __init__(self, image, position, function, size=None):
         Sprite.__init__(self, image, position, size)
         self.function = function
+        self.blocksMovement = False
     
     def update(self):
         if self.rect.colliderect(GameState.player.rect):

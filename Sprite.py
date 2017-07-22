@@ -22,14 +22,19 @@ class Sprite(pygame.sprite.Sprite):
             self.image = pygame.transform.scale(self.image, size)
         
         self.rect = self.image.get_rect(topleft=position)
+        self.blocksMovement = True
         
-    def moveBy(self, x, y, colliders=()):
+    def moveBy(self, x, y):
         destination = (self.rect.x + x, self.rect.y + y)
+        def collideany(group):
+            for s in group.sprites():
+                if s.blocksMovement and s.rect.collidepoint(destination):
+                    return True
+            return False
         
-        for c in colliders:
-            if c.rect.collidepoint(destination):
-                return False
-                
+        if collideany(GameState.statics) or collideany(GameState.dynamics):
+            return False
+        
         self.rect.x, self.rect.y = destination
         return True
     
@@ -43,6 +48,7 @@ class HealthSprite(Sprite):
         self.maxHp = health
         self.hp = health
         self.lasthit = 0
+        self.blocksMovement = False
     
     def heal(self, amount):
         self.hp = min(self.maxHp, self.hp+amount)

@@ -7,6 +7,7 @@ from Enemy import Enemy
 import GameState
 import UI
 import random
+from Player import Player
 
 SCALE   = 20
 MAPSIZE = 10
@@ -33,13 +34,10 @@ for x in range(maze.M+2):
 GameState.statics.add(*walls)
 GameState.initBackground()
 
-GameState.player = HealthSprite("player_placeholder.png", playerPos, SCALE, 3)
-GameState.dynamics.add(GameState.player)
+Player(playerPos, SCALE)
 
-enemies = pygame.sprite.Group()
 for i in range(3):
-    enemies.add(Enemy("enemy_placeholder.png", SCALE))
-GameState.dynamics.add(*enemies)
+    GameState.dynamics.add(Enemy("enemy_placeholder.png", SCALE))
 
 UI.UIText.FONT = pygame.font.Font(None, 40)
 UIGroup = pygame.sprite.Group()
@@ -53,21 +51,7 @@ def handlePlayerInput():
         if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
             sys.exit()
         elif not GameState.gameOver and event.type == KEYDOWN:
-            movePlayer(event.key)
-
-def movePlayer(key):
-    vector = None
-    if key in (K_a, K_LEFT):
-        vector = (-SCALE, 0)
-    elif key in (K_w, K_UP):
-        vector = (0, -SCALE)
-    elif key in (K_d, K_RIGHT):
-        vector = (SCALE, 0)
-    elif key in (K_s, K_DOWN):
-        vector = (0, SCALE)
-    
-    if vector is not None:
-        GameState.player.moveBy(*vector, colliders=walls)
+            GameState.player.keydown(event.key)
 
 while not GameState.gameOver:
     handlePlayerInput()
@@ -78,8 +62,6 @@ while not GameState.gameOver:
     
     GameState.dynamics.update()
     GameState.draw(screen)
-    for e in enemies:
-        e.roam(SCALE, walls)
     
     UIGroup.update()
     UIGroup.draw(screen)
