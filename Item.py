@@ -21,5 +21,5 @@ def _healPlayer(amount):
     GameState.player.heal(amount)
     return True
 
-def HealItem(position, amount, size):
-    return Item(healimg, position, lambda: _healPlayer(amount), size=size)
+def HealItem(position, amount):
+    return Item(healimg, position, lambda: _healPlayer(amount))

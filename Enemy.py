@@ -6,9 +6,7 @@ import GameState
 
 class Enemy(HealthSprite):
     
-    def __init__(self, image, positionRange, size=SCALE):
-        position = (random.randrange(1, positionRange) * size, random.randrange(1, positionRange) * size)
-        
+    def __init__(self, image, position, size=SCALE):
         HealthSprite.__init__(self, image, position, size, 3)
         self.lastRoam = 0
 
