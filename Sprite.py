@@ -3,6 +3,7 @@
 import os, sys
 import pygame
 from pygame.locals import *
+import GameState
 
 class Sprite(pygame.sprite.Sprite):
     
@@ -16,3 +17,6 @@ class Sprite(pygame.sprite.Sprite):
             self.image = pygame.transform.scale(self.image, size)
         
         self.rect = self.image.get_rect(center=position)
+    
+    def draw(self, surface):
+        surface.blit(self.image, GameState.toView(self.rect.center))

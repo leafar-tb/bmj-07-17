@@ -3,6 +3,7 @@ from pygame.locals import *
 import sys
 from generation import genMaze
 from Sprite import Sprite
+import GameState
 
 pygame.init()
 
@@ -22,6 +23,9 @@ while 1:
         if event.type in (QUIT, KEYDOWN):
             sys.exit()
     
-    walls.draw(pygame.display.get_surface())
+    screen.fill((0,0,0))
+    for sprite in walls:
+        sprite.draw(screen)
+    #GameState.cameraPos[0] += 1
     pygame.display.update()
     pygame.time.delay(100)
