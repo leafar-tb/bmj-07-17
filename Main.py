@@ -21,6 +21,10 @@ UIGroup.add(
     UI.UIText(
         lambda: "Health: %s"%GameState.player.hp,
         {"topleft":(0,0)}))
+UIGroup.add(
+    UI.UIText(
+        lambda: "Level: %s"%GameState.level,
+        {"topright":screen.get_rect().topright}))
         
 wallimg = pygame.image.load(
     os.path.join('resources', 'sprites', "wall.png")).convert()
@@ -28,6 +32,7 @@ wallimg = pygame.transform.scale(wallimg, (SCALE, SCALE))
 
 def createLevel():
     GameState.clean()
+    GameState.level += 1
     
     stairUp = Item("stairs_up.png", (SCALE, SCALE), GameState.triggerLoad)
     GameState.dynamics.add(stairUp)

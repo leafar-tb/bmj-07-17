@@ -7,6 +7,7 @@ dynamics = pygame.sprite.Group()
 player = None
 gameOver = False
 loadNextLevel = True
+level = 0
 
 cameraPos = [0,0]
 
