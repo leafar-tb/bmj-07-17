@@ -3,6 +3,7 @@ from pygame.locals import *
 import sys, os
 from generation import genMaze
 from Sprite import Sprite, HealthSprite
+from Item import Item
 from Enemy import Enemy
 import GameState
 import UI
@@ -13,40 +14,44 @@ from Config import SCALE, MAPSIZE
 pygame.init()
 screen = pygame.display.set_mode((640, 480))
 
-wallimg = pygame.image.load(
-    os.path.join('resources', 'sprites', "wall.png")).convert()
-wallimg = pygame.transform.scale(wallimg, (SCALE, SCALE))
-
-stairUp = Sprite("stairs_up.png", (SCALE, SCALE))
-GameState.stairs.add(stairUp)
-playerPos = None
-maze = genMaze(MAPSIZE)
-walls = pygame.sprite.Group()
-for x in range(maze.M+2):
-    for y in range(maze.N+2):
-        if not maze[x-1,y-1]:
-            walls.add(Sprite(wallimg, (x*SCALE, y*SCALE)))
-        elif playerPos is None:
-            playerPos = x*SCALE, y*SCALE
-        elif random.random() < .01:
-            playerPos = x*SCALE, y*SCALE
-        else:
-            stairUp.rect.x, stairUp.rect.y = x*SCALE, y*SCALE            
-
-GameState.statics.add(*walls)
-GameState.initBackground()
-
-Player(playerPos, SCALE)
-
-for i in range(3):
-    GameState.dynamics.add(Enemy("enemy_placeholder.png", MAPSIZE))
-
+Player((0,0), SCALE)
 UI.UIText.FONT = pygame.font.Font(None, 40)
 UIGroup = pygame.sprite.Group()
 UIGroup.add(
     UI.UIText(
         lambda: "Health: %s"%GameState.player.hp,
         {"topleft":(0,0)}))
+        
+wallimg = pygame.image.load(
+    os.path.join('resources', 'sprites', "wall.png")).convert()
+wallimg = pygame.transform.scale(wallimg, (SCALE, SCALE))
+
+def createLevel():
+    GameState.clean()
+    
+    stairUp = Item("stairs_up.png", (SCALE, SCALE), GameState.triggerLoad)
+    GameState.dynamics.add(stairUp)
+    playerPos = None
+    maze = genMaze(MAPSIZE)
+    walls = pygame.sprite.Group()
+    for x in range(maze.M+2):
+        for y in range(maze.N+2):
+            if not maze[x-1,y-1]:
+                walls.add(Sprite(wallimg, (x*SCALE, y*SCALE)))
+            elif playerPos is None:
+                playerPos = x*SCALE, y*SCALE
+            elif random.random() < .01:
+                playerPos = x*SCALE, y*SCALE
+            else:
+                stairUp.rect.x, stairUp.rect.y = x*SCALE, y*SCALE            
+
+    GameState.statics.add(*walls)
+    GameState.initBackground()
+    
+    GameState.player.rect.topleft = playerPos
+
+    for i in range(3):
+        GameState.dynamics.add(Enemy("enemy_placeholder.png", MAPSIZE))
 
 def handlePlayerInput():
     for event in pygame.event.get():
@@ -56,6 +61,9 @@ def handlePlayerInput():
             GameState.player.keydown(event.key)
 
 while not GameState.gameOver:
+    if GameState.loadNextLevel:
+        print("trigger create")
+        createLevel()
     handlePlayerInput()
     
     # camera follows player
@@ -70,6 +78,7 @@ while not GameState.gameOver:
     
     pygame.display.update()
     pygame.time.delay(100)
+    
 
 while 1:
     handlePlayerInput()
