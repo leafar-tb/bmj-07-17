@@ -4,6 +4,7 @@ import sys
 from generation import genMaze
 from Sprite import Sprite
 import GameState
+import UI
 
 pygame.init()
 screen = pygame.display.set_mode((640, 480))
@@ -24,9 +25,16 @@ for x in range(maze.M+2):
 GameState.statics.add(*walls)
 GameState.initBackground()
 
+UI.UIText.FONT = pygame.font.Font(None, 40)
+UIGroup = pygame.sprite.Group()
+UIGroup.add(
+    UI.UIText(
+        lambda: "%s,%s"%player.rect.center,
+        {"topleft":(0,0)}))
+
 def handlePlayerInput():
     for event in pygame.event.get():
-        if event.type == QUIT:
+        if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
             sys.exit()
         elif event.type == KEYDOWN and event.key in (K_a, K_w, K_d, K_s):
             movePlayer(event.key)
@@ -50,5 +58,9 @@ while 1:
         player.rect.top-screen.get_rect().height//2
     
     GameState.draw(screen)
+    
+    UIGroup.update()
+    UIGroup.draw(screen)
+    
     pygame.display.update()
     pygame.time.delay(100)
