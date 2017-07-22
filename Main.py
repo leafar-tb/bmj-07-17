@@ -51,16 +51,16 @@ def handlePlayerInput():
     for event in pygame.event.get():
         if event.type == QUIT or (event.type == KEYDOWN and event.key == K_ESCAPE):
             sys.exit()
-        elif event.type == KEYDOWN and event.key in (K_a, K_w, K_d, K_s):
+        elif event.type == KEYDOWN and event.key in (K_a, K_w, K_d, K_s, K_UP, K_DOWN, K_LEFT, K_RIGHT):
             movePlayer(event.key)
 
 def movePlayer(key):
     vector = (-SCALE, 0)
-    if key == K_w:
+    if key in (K_w, K_UP):
         vector = (0, -SCALE)
-    elif key == K_d:
+    elif key in (K_d, K_RIGHT):
         vector = (SCALE, 0)
-    elif key == K_s:
+    elif key in (K_s, K_DOWN):
         vector = (0, SCALE)
             
     player.moveBy(*vector, colliders=walls)
