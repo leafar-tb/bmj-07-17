@@ -3,7 +3,7 @@ from pygame.locals import *
 import sys, os
 from generation import genMaze
 from Sprite import Sprite, HealthSprite
-from Item import Item
+from Item import Item, HealItem
 from Enemy import Enemy
 import GameState
 import UI
@@ -43,7 +43,10 @@ def createLevel():
             elif random.random() < .01:
                 playerPos = x*SCALE, y*SCALE
             else:
-                stairUp.rect.x, stairUp.rect.y = x*SCALE, y*SCALE            
+                if random.random() < 0.01:
+                    GameState.dynamics.add(HealItem((x*SCALE, y*SCALE), 1, SCALE))
+                
+                stairUp.rect.x, stairUp.rect.y = x*SCALE, y*SCALE
 
     GameState.statics.add(*walls)
     GameState.initBackground()
