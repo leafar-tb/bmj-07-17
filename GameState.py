@@ -6,6 +6,7 @@ from pygame.locals import *
 
 statics = pygame.sprite.Group()
 moving = pygame.sprite.Group()
+stairs = pygame.sprite.Group()
 
 cameraPos = [0,0]
 
@@ -20,8 +21,10 @@ def initBackground():
     cameraPos = [0,0] # reset
     
 def draw(screen):
-    screen.fill((0,0,0))
+    screen.fill((0, 0, 0))
     screen.blit(background, toView(bgRect.topleft))
+    for s in stairs:
+        s.draw(screen)
     for s in moving:
         s.draw(screen)
     

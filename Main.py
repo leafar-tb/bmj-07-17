@@ -6,29 +6,35 @@ from Sprite import Sprite
 from Enemy import Enemy
 import GameState
 import UI
+import random
 
 pygame.init()
 screen = pygame.display.set_mode((640, 480))
 
 SCALE = 20
+MAZESIZE = 20
 
 player = Sprite("player_placeholder.png", (SCALE, SCALE), SCALE)
 GameState.moving.add(player)
 
-maze = genMaze(20)
+stairUp = Sprite("stairs_up.png", (SCALE, SCALE), SCALE)
+GameState.stairs.add(stairUp)
+maze = genMaze(MAZESIZE)
 walls = pygame.sprite.Group()
 floors = pygame.sprite.Group()
 for x in range(maze.M+2):
     for y in range(maze.N+2):
         if not maze[x-1,y-1]:
             walls.add(Sprite("wall.png", (x*SCALE, y*SCALE), SCALE))
+        else:
+            stairUp.rect.x, stairUp.rect.y = x*SCALE, y*SCALE
 
 GameState.statics.add(*walls)
 GameState.initBackground()
 
 enemies = pygame.sprite.Group()
 for i in range(3):
-    enemies.add(Enemy("enemy_placeholder.png", SCALE))
+    enemies.add(Enemy("enemy_placeholder.png", SCALE, MAZESIZE))
 GameState.moving.add(*enemies)
 
 UI.UIText.FONT = pygame.font.Font(None, 40)
@@ -62,7 +68,7 @@ while 1:
     # camera follows player
     GameState.cameraPos = player.rect.left-screen.get_rect().width//2, \
         player.rect.top-screen.get_rect().height//2
-    
+            
     GameState.draw(screen)
     for e in enemies:
         e.roam(SCALE, walls)
