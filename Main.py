@@ -10,15 +10,15 @@ screen = pygame.display.set_mode((640, 480))
 
 SCALE = 20
 
-player = pygame.sprite.Group(Sprite("player_placeholder.png", (0, 0), SCALE))
+player = Sprite("player_placeholder.png", (SCALE, SCALE), SCALE)
 GameState.moving.add(player)
 
 maze = genMaze(20)
 walls = pygame.sprite.Group()
 floors = pygame.sprite.Group()
-for x in range(maze.M):
-    for y in range(maze.N):
-        if not maze[x,y]:
+for x in range(maze.M+2):
+    for y in range(maze.N+2):
+        if not maze[x-1,y-1]:
             walls.add(Sprite("wall_placeholder.png", (x*SCALE, y*SCALE), SCALE))
 
 GameState.statics.add(*walls)
@@ -40,11 +40,14 @@ def movePlayer(key):
     elif key == K_s:
         vector = (0, SCALE)
             
-    for p in player:
-        p.moveBy(*vector, colliders=walls)
+    player.moveBy(*vector, colliders=walls)
 
 while 1:
     handlePlayerInput()
+    
+    # camera follows player
+    GameState.cameraPos = player.rect.left-screen.get_rect().width//2, \
+        player.rect.top-screen.get_rect().height//2
     
     GameState.draw(screen)
     pygame.display.update()
