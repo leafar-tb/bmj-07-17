@@ -6,28 +6,34 @@ from Sprite import Sprite
 from Enemy import Enemy
 import GameState
 import UI
+import random
 
 pygame.init()
 screen = pygame.display.set_mode((640, 480))
 
 SCALE = 20
 
-player = Sprite("player_placeholder.png", (SCALE, SCALE), SCALE)
-GameState.moving.add(player)
-
 wallimg = pygame.image.load(
     os.path.join('resources', 'sprites', "wall.png")).convert()
 wallimg = pygame.transform.scale(wallimg, (SCALE, SCALE))
 
+playerPos = None
 maze = genMaze(40)
 walls = pygame.sprite.Group()
 for x in range(maze.M+2):
     for y in range(maze.N+2):
         if not maze[x-1,y-1]:
             walls.add(Sprite(wallimg, (x*SCALE, y*SCALE)))
+        elif playerPos is None:
+            playerPos = x*SCALE, y*SCALE
+        elif random.random() < .01:
+            playerPos = x*SCALE, y*SCALE
 
 GameState.statics.add(*walls)
 GameState.initBackground()
+
+player = Sprite("player_placeholder.png", playerPos, SCALE)
+GameState.moving.add(player)
 
 enemies = pygame.sprite.Group()
 for i in range(3):
