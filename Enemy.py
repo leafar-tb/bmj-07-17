@@ -16,5 +16,5 @@ class Enemy(Sprite):
     def roam(self, SCALE, colliders):
         self.timeSinceRoam += 1
         if self.timeSinceRoam > 3:
-            self.moveBy(*random.choice(((-SCALE, 0), (0, -SCALE), (SCALE, 0), (0, SCALE))), colliders)
+            self.moveBy(*random.choice(((-SCALE, 0), (0, -SCALE), (SCALE, 0), (0, SCALE))), colliders=colliders)
             self.timeSinceRoam = 0

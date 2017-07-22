@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-import sys
+import sys, os
 from generation import genMaze
 from Sprite import Sprite
 from Enemy import Enemy
@@ -15,13 +15,16 @@ SCALE = 20
 player = Sprite("player_placeholder.png", (SCALE, SCALE), SCALE)
 GameState.moving.add(player)
 
-maze = genMaze(20)
+wallimg = pygame.image.load(
+    os.path.join('resources', 'sprites', "wall.png")).convert()
+wallimg = pygame.transform.scale(wallimg, (SCALE, SCALE))
+
+maze = genMaze(40)
 walls = pygame.sprite.Group()
-floors = pygame.sprite.Group()
 for x in range(maze.M+2):
     for y in range(maze.N+2):
         if not maze[x-1,y-1]:
-            walls.add(Sprite("wall.png", (x*SCALE, y*SCALE), SCALE))
+            walls.add(Sprite(wallimg, (x*SCALE, y*SCALE)))
 
 GameState.statics.add(*walls)
 GameState.initBackground()

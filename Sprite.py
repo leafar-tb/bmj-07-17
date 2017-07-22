@@ -9,8 +9,13 @@ class Sprite(pygame.sprite.Sprite):
     
     def __init__(self, image, position, size=None):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.image.load(
-            os.path.join('resources', 'sprites', image)).convert()
+        
+        if type(image) == str:
+            self.image = pygame.image.load(
+                os.path.join('resources', 'sprites', image)).convert()
+        else:
+            self.image = image
+        
         if size is not None:
             if type(size) is int or type(size) is float:
                 size = size, size
