@@ -5,12 +5,12 @@ import GameState
 
 class Enemy(HealthSprite):
     
-    def __init__(self, image, size):
-        position = (random.randrange(0, 10) * size, random.randrange(0, 10) * size)
+    def __init__(self, image, size, positionRange):
+        position = (random.randrange(1, positionRange) * size, random.randrange(1, positionRange) * size)
         
         HealthSprite.__init__(self, image, position, size, 3)
         self.lastRoam = 0
-    
+
     def update(self):
         if self.rect.colliderect(GameState.player.rect):
             GameState.player.hit(1)

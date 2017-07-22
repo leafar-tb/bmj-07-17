@@ -19,6 +19,8 @@ wallimg = pygame.image.load(
     os.path.join('resources', 'sprites', "wall.png")).convert()
 wallimg = pygame.transform.scale(wallimg, (SCALE, SCALE))
 
+stairUp = Sprite("stairs_up.png", (SCALE, SCALE), SCALE)
+GameState.stairs.add(stairUp)
 playerPos = None
 maze = genMaze(MAPSIZE)
 walls = pygame.sprite.Group()
@@ -30,6 +32,9 @@ for x in range(maze.M+2):
             playerPos = x*SCALE, y*SCALE
         elif random.random() < .01:
             playerPos = x*SCALE, y*SCALE
+        else:
+            stairUp.rect.x, stairUp.rect.y = x*SCALE, y*SCALE
+            
 
 GameState.statics.add(*walls)
 GameState.initBackground()
@@ -37,7 +42,7 @@ GameState.initBackground()
 Player(playerPos, SCALE)
 
 for i in range(3):
-    GameState.dynamics.add(Enemy("enemy_placeholder.png", SCALE))
+    GameState.dynamics.add(Enemy("enemy_placeholder.png", SCALE, MAPSIZE))
 
 UI.UIText.FONT = pygame.font.Font(None, 40)
 UIGroup = pygame.sprite.Group()

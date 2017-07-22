@@ -3,6 +3,7 @@ import pygame
 from pygame.locals import *
 
 statics = pygame.sprite.Group()
+stairs = pygame.sprite.Group()
 dynamics = pygame.sprite.Group()
 player = None
 gameOver = False
@@ -20,8 +21,10 @@ def initBackground():
     cameraPos = [0,0] # reset
     
 def draw(screen):
-    screen.fill((0,0,0))
+    screen.fill((0, 0, 0))
     screen.blit(background, toView(bgRect.topleft))
+    for s in stairs:
+        s.draw(screen)
     for s in dynamics:
         s.draw(screen)
     
