@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-import sys, os
+import sys, os, math
 from generation import genMaze
 from Sprite import Sprite, HealthSprite
 from Item import Item, HealItem
@@ -38,28 +38,29 @@ def createLevel():
     GameState.dynamics.add(stairUp)
     playerPos = None
     maze = genMaze(MAPSIZE)
-    walls = pygame.sprite.Group()
+    
+    floors = sum(sum(maze.data))
+    spawns = [lambda pos: HealItem(pos, 1) for _ in range(int(0.02*floors))]
+    spawns += [lambda pos: Enemy("enemy_placeholder.png", pos) for _ in range(int(0.05*floors))]
+    
     for x in range(maze.M+2):
         for y in range(maze.N+2):
             if not maze[x-1,y-1]:
-                walls.add(Sprite(wallimg, (x*SCALE, y*SCALE)))
+                GameState.statics.add(Sprite(wallimg, (x*SCALE, y*SCALE)))
             elif playerPos is None:
                 playerPos = x*SCALE, y*SCALE
             elif random.random() < .01:
                 playerPos = x*SCALE, y*SCALE
             else:
-                if random.random() < 0.01:
-                    GameState.dynamics.add(HealItem((x*SCALE, y*SCALE), 1, SCALE))
-                
+                if random.random() < max(len(spawns)/floors, .1) and spawns:
+                    i = random.randrange(len(spawns))
+                    GameState.dynamics.add(spawns[i]((x*SCALE,y*SCALE)))
+                    del spawns[i]
+                floors -= 1
                 stairUp.rect.x, stairUp.rect.y = x*SCALE, y*SCALE
 
-    GameState.statics.add(*walls)
-    GameState.initBackground()
-    
+    GameState.initBackground()    
     GameState.player.rect.topleft = playerPos
-
-    for i in range(3):
-        GameState.dynamics.add(Enemy("enemy_placeholder.png", MAPSIZE))
 
 def handlePlayerInput():
     for event in pygame.event.get():

@@ -20,5 +20,5 @@ healimg.fill((255,0,255))
 def _healPlayer(amount):
     return GameState.player.heal(amount)
 
-def HealItem(position, amount, size):
-    return Item(healimg, position, lambda: _healPlayer(amount), size=size)
+def HealItem(position, amount):
+    return Item(healimg, position, lambda: _healPlayer(amount))
