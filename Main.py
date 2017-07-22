@@ -37,7 +37,7 @@ def createLevel():
     stairUp = Item("stairs_up.png", (SCALE, SCALE), GameState.triggerLoad)
     GameState.dynamics.add(stairUp)
     playerPos = None
-    maze = genMaze(MAPSIZE)
+    maze = genMaze(MAPSIZE+GameState.level)
     
     floors = sum(sum(maze.data))
     spawns = [lambda pos: HealItem(pos, 1) for _ in range(int(0.02*floors))]
@@ -49,10 +49,10 @@ def createLevel():
                 GameState.statics.add(Sprite(wallimg, (x*SCALE, y*SCALE)))
             elif playerPos is None:
                 playerPos = x*SCALE, y*SCALE
-            elif random.random() < .01:
+            elif random.random() < .01 and x < maze.M/2 and y < maze.N:
                 playerPos = x*SCALE, y*SCALE
             else:
-                if random.random() < max(len(spawns)/floors, .1) and spawns:
+                if random.random() < max(len(spawns)/floors, .05) and spawns:
                     i = random.randrange(len(spawns))
                     GameState.dynamics.add(spawns[i]((x*SCALE,y*SCALE)))
                     del spawns[i]
