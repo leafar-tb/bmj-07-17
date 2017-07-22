@@ -18,9 +18,15 @@ class Sprite(pygame.sprite.Sprite):
         
         self.rect = self.image.get_rect(center=position)
         
-    def moveBy(self, x, y):
-        self.rect.x += x
-        self.rect.y += y
+    def moveBy(self, x, y, colliders=()):
+        destination = (self.rect.x + x, self.rect.y + y)
+        
+        for c in colliders:
+            if c.rect.collidepoint(destination):
+                return False
+                
+        self.rect.x, self.rect.y = destination
+        return True
     
     def draw(self, surface):
         surface.blit(self.image, GameState.toView(self.rect.center))

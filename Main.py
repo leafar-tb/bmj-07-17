@@ -37,7 +37,7 @@ def movePlayer(key):
         vector = (0, SCALE)
             
     for p in player:
-        p.moveBy(*vector)
+        p.moveBy(*vector, walls)
 
 while 1:
     handlePlayerInput()
