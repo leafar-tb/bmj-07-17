@@ -3,7 +3,7 @@ import pygame
 from pygame.locals import *
 
 statics = pygame.sprite.Group()
-moving = pygame.sprite.Group()
+dynamics = pygame.sprite.Group()
 player = None
 gameOver = False
 
@@ -22,7 +22,7 @@ def initBackground():
 def draw(screen):
     screen.fill((0,0,0))
     screen.blit(background, toView(bgRect.topleft))
-    for s in moving:
+    for s in dynamics:
         s.draw(screen)
     
 def toView(pos):

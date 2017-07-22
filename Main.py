@@ -34,12 +34,12 @@ GameState.statics.add(*walls)
 GameState.initBackground()
 
 GameState.player = HealthSprite("player_placeholder.png", playerPos, SCALE, 3)
-GameState.moving.add(GameState.player)
+GameState.dynamics.add(GameState.player)
 
 enemies = pygame.sprite.Group()
 for i in range(3):
     enemies.add(Enemy("enemy_placeholder.png", SCALE))
-GameState.moving.add(*enemies)
+GameState.dynamics.add(*enemies)
 
 UI.UIText.FONT = pygame.font.Font(None, 40)
 UIGroup = pygame.sprite.Group()
@@ -76,7 +76,7 @@ while not GameState.gameOver:
     GameState.cameraPos = GameState.player.rect.left-screen.get_rect().width//2, \
         GameState.player.rect.top-screen.get_rect().height//2
     
-    GameState.moving.update()
+    GameState.dynamics.update()
     GameState.draw(screen)
     for e in enemies:
         e.roam(SCALE, walls)
