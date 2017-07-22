@@ -2,18 +2,16 @@ import pygame
 from pygame.locals import *
 import GameState
 from Sprite import HealthSprite
-
-PLAYER_HEALTH = 3
+from Config import SCALE, PLAYER_HEALTH
 
 class Player(HealthSprite):
     
-    def __init__(self, position, size):
+    def __init__(self, position, size=SCALE):
         HealthSprite.__init__(self, "player_placeholder.png", position, size, PLAYER_HEALTH)
         GameState.player = self
         GameState.dynamics.add(self)
     
     def keydown(self, key):
-        SCALE = self.rect.width
         vector = None
         if key in (K_a, K_LEFT):
             vector = (-SCALE, 0)

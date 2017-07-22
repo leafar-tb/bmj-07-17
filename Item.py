@@ -1,10 +1,11 @@
 import pygame
 import GameState
 from Sprite import Sprite
+from Config import SCALE
 
 class Item(Sprite):
     
-    def __init__(self, image, position, function, size=None):
+    def __init__(self, image, position, function, size=SCALE):
         Sprite.__init__(self, image, position, size)
         self.function = function
         self.blocksMovement = False

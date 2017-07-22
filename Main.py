@@ -8,9 +8,7 @@ import GameState
 import UI
 import random
 from Player import Player
-
-SCALE   = 20
-MAPSIZE = 10
+from Config import SCALE, MAPSIZE
 
 pygame.init()
 screen = pygame.display.set_mode((640, 480))
@@ -19,7 +17,7 @@ wallimg = pygame.image.load(
     os.path.join('resources', 'sprites', "wall.png")).convert()
 wallimg = pygame.transform.scale(wallimg, (SCALE, SCALE))
 
-stairUp = Sprite("stairs_up.png", (SCALE, SCALE), SCALE)
+stairUp = Sprite("stairs_up.png", (SCALE, SCALE))
 GameState.stairs.add(stairUp)
 playerPos = None
 maze = genMaze(MAPSIZE)
@@ -33,8 +31,7 @@ for x in range(maze.M+2):
         elif random.random() < .01:
             playerPos = x*SCALE, y*SCALE
         else:
-            stairUp.rect.x, stairUp.rect.y = x*SCALE, y*SCALE
-            
+            stairUp.rect.x, stairUp.rect.y = x*SCALE, y*SCALE            
 
 GameState.statics.add(*walls)
 GameState.initBackground()
@@ -42,7 +39,7 @@ GameState.initBackground()
 Player(playerPos, SCALE)
 
 for i in range(3):
-    GameState.dynamics.add(Enemy("enemy_placeholder.png", SCALE, MAPSIZE))
+    GameState.dynamics.add(Enemy("enemy_placeholder.png", MAPSIZE))
 
 UI.UIText.FONT = pygame.font.Font(None, 40)
 UIGroup = pygame.sprite.Group()

@@ -1,13 +1,12 @@
-#/usr/bin/python
-
 import os, sys
 import pygame
 from pygame.locals import *
 import GameState
+from Config import SCALE
 
 class Sprite(pygame.sprite.Sprite):
     
-    def __init__(self, image, position, size=None):
+    def __init__(self, image, position, size=SCALE):
         pygame.sprite.Sprite.__init__(self)
         
         if type(image) == str:
@@ -43,7 +42,7 @@ class Sprite(pygame.sprite.Sprite):
 
 class HealthSprite(Sprite):
     
-    def __init__(self, image, position, size=None, health=1):
+    def __init__(self, image, position, size=SCALE, health=1):
         Sprite.__init__(self, image, position, size)
         self.maxHp = health
         self.hp = health
