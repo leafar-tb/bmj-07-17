@@ -6,19 +6,23 @@ from Sprite import Sprite
 import GameState
 
 pygame.init()
-
 screen = pygame.display.set_mode((640, 480))
+
+SCALE = 20
+
+player = pygame.sprite.Group(Sprite("player_placeholder.png", (0, 0), SCALE))
+GameState.moving.add(player)
 
 maze = genMaze(20)
 walls = pygame.sprite.Group()
 floors = pygame.sprite.Group()
-SCALE = 20
-
-player = pygame.sprite.Group(Sprite("player_placeholder.png", (0, 0), SCALE))
 for x in range(maze.M):
     for y in range(maze.N):
         if not maze[x,y]:
-            walls.add(Sprite("wall_placeholder.png", (x*SCALE+SCALE/2, y*SCALE+SCALE/2), SCALE))
+            walls.add(Sprite("wall_placeholder.png", (x*SCALE, y*SCALE), SCALE))
+
+GameState.statics.add(*walls)
+GameState.initBackground()
 
 def handlePlayerInput():
     for event in pygame.event.get():
@@ -37,17 +41,11 @@ def movePlayer(key):
         vector = (0, SCALE)
             
     for p in player:
-        p.moveBy(*vector, walls)
+        p.moveBy(*vector, colliders=walls)
 
 while 1:
     handlePlayerInput()
     
-    screen.fill((0,0,0))
-    for sprite in walls:
-        sprite.draw(screen)
-    player.draw(pygame.display.get_surface())
-    
-    #GameState.cameraPos[0] += 1
+    GameState.draw(screen)
     pygame.display.update()
     pygame.time.delay(100)
-

@@ -16,7 +16,7 @@ class Sprite(pygame.sprite.Sprite):
                 size = size, size
             self.image = pygame.transform.scale(self.image, size)
         
-        self.rect = self.image.get_rect(center=position)
+        self.rect = self.image.get_rect(topleft=position)
         
     def moveBy(self, x, y, colliders=()):
         destination = (self.rect.x + x, self.rect.y + y)
@@ -29,4 +29,4 @@ class Sprite(pygame.sprite.Sprite):
         return True
     
     def draw(self, surface):
-        surface.blit(self.image, GameState.toView(self.rect.center))
+        surface.blit(self.image, GameState.toView(self.rect.topleft))
