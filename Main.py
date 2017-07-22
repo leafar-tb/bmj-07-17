@@ -62,7 +62,6 @@ def handlePlayerInput():
 
 while not GameState.gameOver:
     if GameState.loadNextLevel:
-        print("trigger create")
         createLevel()
     handlePlayerInput()
     

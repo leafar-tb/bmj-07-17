@@ -22,14 +22,15 @@ def clean():
     loadNextLevel = False
 
 def initBackground():
-    global bgRect, background
+    global bgRect, background, cameraPos
     bgRect = statics.sprites()[0].rect.unionall(list(map(lambda s: s.rect, statics)))
     background = pygame.surface.Surface(bgRect.size)
     
+    oldCam = cameraPos
     cameraPos = bgRect.topleft # modify for drawing
     for s in statics:
         s.draw(background)
-    cameraPos = [0,0] # reset
+    cameraPos = oldCam # reset
     
 def draw(screen):
     screen.fill((0, 0, 0))
