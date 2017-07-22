@@ -18,8 +18,7 @@ class Item(Sprite):
 healimg = pygame.surface.Surface((10,10))
 healimg.fill((255,0,255))
 def _healPlayer(amount):
-    GameState.player.heal(amount)
-    return True
+    return GameState.player.heal(amount)
 
 def HealItem(position, amount, size):
     return Item(healimg, position, lambda: _healPlayer(amount), size=size)

@@ -50,7 +50,9 @@ class HealthSprite(Sprite):
         self.blocksMovement = False
     
     def heal(self, amount):
+        hpBefore = self.hp
         self.hp = min(self.maxHp, self.hp+amount)
+        return self.hp != hpBefore
     
     def hit(self, damage):
         #1s i-frame after being hit
