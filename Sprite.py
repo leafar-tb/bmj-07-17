@@ -35,3 +35,25 @@ class Sprite(pygame.sprite.Sprite):
     
     def draw(self, surface):
         surface.blit(self.image, GameState.toView(self.rect.topleft))
+
+class HealthSprite(Sprite):
+    
+    def __init__(self, image, position, size=None, health=1):
+        Sprite.__init__(self, image, position, size)
+        self.maxHp = health
+        self.hp = health
+        self.lasthit = 0
+    
+    def heal(self, amount):
+        self.hp = min(self.maxHp, self.hp+amount)
+    
+    def hit(self, damage):
+        #1s i-frame after being hit
+        if pygame.time.get_ticks() - self.lasthit < 1000:
+            return
+        self.hp -= damage
+        self.lasthit = pygame.time.get_ticks()
+        if self.hp <= 0:
+            self.kill()
+            if self is GameState.player:
+                GameState.gameOver = True

@@ -1,11 +1,11 @@
-#/usr/bin/python
-
 import os, sys
 import pygame
 from pygame.locals import *
 
 statics = pygame.sprite.Group()
 moving = pygame.sprite.Group()
+player = None
+gameOver = False
 
 cameraPos = [0,0]
 
