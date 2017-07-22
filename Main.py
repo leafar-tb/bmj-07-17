@@ -3,6 +3,7 @@ from pygame.locals import *
 import sys
 from generation import genMaze
 from Sprite import Sprite
+import GameState
 
 pygame.init()
 
@@ -41,9 +42,12 @@ def movePlayer(key):
 while 1:
     handlePlayerInput()
     
-    walls.draw(pygame.display.get_surface())
+    screen.fill((0,0,0))
+    for sprite in walls:
+        sprite.draw(screen)
     player.draw(pygame.display.get_surface())
     
+    #GameState.cameraPos[0] += 1
     pygame.display.update()
     pygame.time.delay(100)
 
